@@ -1,24 +1,25 @@
-import React, { useState, useEffect } from "react"; // 💡 IMPORT useEffect
-import axios from "axios"; // 💡 IMPORT axios
+import React, { useState, useEffect } from "react"; 
+import axios from "axios"; 
 import Navbar from "./Navbar"; 
 import StudentForm from "./components/StudentForm"; 
 import StudentList from "./components/StudentList";
-import PlacementDashboard from "./components/PlacementDashboard"; // 💡 ASSUMING YOU CREATED THIS FILE
+import PlacementDashboard from "./components/PlacementDashboard"; 
 
 function App() {
   const [refresh, setRefresh] = useState(false);
   const [editingStudent, setEditingStudent] = useState(null); 
-  const [allStudents, setAllStudents] = useState([]); // 💡 NEW: State to hold all student data
+  const [allStudents, setAllStudents] = useState([]); // State to hold all student data
 
-  // 💡 EFFECT: Fetch data whenever refresh state changes
+  // 💡 FIX 1: Centralized Data Fetch for Dashboard and List
   useEffect(() => {
-      axios.get("http://localhost:5000/api/students")
-          .then(res => setAllStudents(res.data))
+      // Use the live API URL
+      axios.get("https://p-log.onrender.com/api/students") 
+          .then(res => setAllStudents(res.data.reverse())) // Reverse here for newest first
           .catch(err => console.error("Error fetching data for dashboard:", err));
-  }, [refresh]);
+  }, [refresh]); // Fetches data whenever refresh is toggled
   
   const handleStudentAdded = () => {
-    setRefresh(!refresh);
+    setRefresh(prev => !prev); // Toggle state to force refetch
     setEditingStudent(null); 
   };
   
@@ -30,7 +31,7 @@ function App() {
     <div className="min-h-screen bg-white/50 dark:bg-dark-bg/50 text-gray-900 dark:text-white">
       <Navbar />
       <div className="pt-24 max-w-3xl mx-auto p-4 space-y-6">
-        {/* DASHBOARD INTEGRATION - Pass the centralized data */}
+        {/* DASHBOARD INTEGRATION */}
         <PlacementDashboard students={allStudents} /> 
 
         <StudentForm 
@@ -39,11 +40,11 @@ function App() {
           setEditingStudent={setEditingStudent} 
         />
         
-        {/* STUDENT LIST - Pass the centralized data and handler */}
+        {/* STUDENT LIST - Pass the data and the refresh trigger function */}
         <StudentList 
-          students={allStudents} // 💡 PASS DATA AS PROP
+          students={allStudents} // PASS DATA
           onEdit={handleEdit} 
-          refresh={refresh} 
+          onDeleteSuccess={handleStudentAdded} // 💡 PASS REFRESH TRIGGER FOR DELETE
         />
       </div>
     </div>

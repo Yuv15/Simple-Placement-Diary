@@ -1,16 +1,13 @@
-import React, { useState } from "react"; // Removed useEffect
+import React, { useState } from "react"; 
 import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion"; 
 import { TrashIcon } from '@heroicons/react/24/outline'; 
 
-// 💡 CHANGE: Accept 'students' array directly from props. Removed 'refresh' prop from here
-function StudentList({ students, onEdit }) { 
-  // 💡 REMOVED: const [students, setStudents] = useState([]); and the useEffect block
-  // Data is now managed and passed down from App.js
-  
+// 💡 CHANGE: Accept 'students' array and new 'onDeleteSuccess' function
+function StudentList({ students, onEdit, onDeleteSuccess }) { 
   const [activeFilter, setActiveFilter] = useState('All'); 
 
-  // --- 1. Delete Logic ---
+  // --- 1. Delete Logic (FIXED) ---
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this student?")) {
       return;
@@ -18,11 +15,10 @@ function StudentList({ students, onEdit }) {
 
     try {
       // Send DELETE request to backend
-      await axios.delete(`https://p-log.onrender.com/api/students`);
+      await axios.delete(`https://p-log.onrender.com/api/students/${id}`);
       
-      // We cannot setStudents here, as it's a prop. We need to tell App.js to refresh.
-      // We don't have the setRefresh function in props, so we rely on App.js fetching the data again
-      // after the successful delete. The item will disappear when the data refetches.
+      // 💡 FIX 2: Call the success function to trigger data refetch in App.js
+      onDeleteSuccess(); 
       
     } catch (err) {
       console.error("Deletion failed:", err);
@@ -30,7 +26,10 @@ function StudentList({ students, onEdit }) {
     }
   };
 
-  // --- 2. Utility Functions & Animations ---
+  // ... (rest of the component logic remains the same) ...
+  
+  const filterOptions = ['All', 'Placed', 'Not Placed', 'Interviewing'];
+  
   const getStatusClass = (status) => {
     const lowerStatus = status.toLowerCase();
     if (lowerStatus.includes('placed')) return 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100';
@@ -38,9 +37,7 @@ function StudentList({ students, onEdit }) {
     if (lowerStatus.includes('interviewing')) return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100';
     return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300';
   };
-  
-  const filterOptions = ['All', 'Placed', 'Not Placed', 'Interviewing'];
-  
+
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.3 } },
@@ -53,7 +50,7 @@ function StudentList({ students, onEdit }) {
     const studentStatus = (s.status || '').toLowerCase();
     const filter = activeFilter.toLowerCase();
     return studentStatus.includes(filter);
-  });
+  }).sort((a, b) => b.createdAt.localeCompare(a.createdAt)); // Sort by creation date (newest first)
 
   return (
     <div className="p-6 bg-white dark:bg-gray-800 shadow-xl rounded-xl transition duration-300">
