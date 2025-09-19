@@ -1,0 +1,56 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Define CSS Variables for the Grid */
+:root {
+  --grid-color-light: #f1f1f1;
+  --grid-dot-color-light: #bbb8b8cc;
+}
+
+.dark {
+  /* Main background color from tailwind.config.js (dark-bg) */
+  --grid-color-dark: #c06b6bb4; 
+  
+  /* FINAL FIX: Use a much LIGHTER gray color for the grid dots.
+     This creates the desired subtle, hazy line effect over the dark background. */
+  --grid-dot-color-dark: #e9a8a8b6; 
+}
+
+/* Base Styles: Subtle Grid Background */
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: white; 
+  background-image: 
+    linear-gradient(0deg, var(--grid-dot-color-light) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-dot-color-light) 1px, transparent 1px);
+  background-size: 30px 30px; 
+  background-attachment: fixed;
+}
+
+/* Dark Mode Grid Override */
+.dark body {
+  background-color: black; 
+  background-image: 
+    linear-gradient(0deg, var(--grid-dot-color-dark) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-dot-color-dark) 1px, transparent 1px);
+  background-size: 30px 30px;
+  background-attachment: fixed;
+}
+/* frontend/src/index.css (or where you put your custom CSS) */
+
+.styled-suffix {
+    /* 1. Reduce the size (e.g., 60% of the main text size) */
+    font-size: 60%; 
+    
+    /* 2. Adjust vertical position (move it up) */
+    position: relative;
+    top: -0.5em; /* Adjust this value to raise the text higher */
+    
+    /* 3. Reduce the font-weight to make it look secondary */
+    font-weight: 500; 
+    
+    /* 4. Optional: Add a slight color difference */
+    color: var(--text-color-secondary, #999); 
+}
