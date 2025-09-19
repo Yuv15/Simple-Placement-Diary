@@ -18,7 +18,7 @@ function StudentList({ students, onEdit }) {
 
     try {
       // Send DELETE request to backend
-      await axios.delete(`https://p-log.onrender.com/api/students/${id}`);
+      await axios.delete(`https://p-log.onrender.com/api/students`);
       
       // We cannot setStudents here, as it's a prop. We need to tell App.js to refresh.
       // We don't have the setRefresh function in props, so we rely on App.js fetching the data again
