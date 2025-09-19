@@ -1,0 +1,88 @@
+{
+  "info": {
+    "name": "Student API",
+    "_postman_id": "c9a3b9a7-ef56-49df-8cdd-1234567890ab",
+    "description": "Postman collection for Student API CRUD operations",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Get All Students",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5000/students",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["students"]
+        }
+      }
+    },
+    {
+      "name": "Get Student by ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5000/students/{{studentId}}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["students", "{{studentId}}"]
+        }
+      }
+    },
+    {
+      "name": "Add Student",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"John Doe\",\n  \"rollNo\": \"CS101\",\n  \"branch\": \"Computer Science\",\n  \"company\": \"Google\",\n  \"status\": \"Placed\",\n  \"email\": \"john@example.com\",\n  \"phone\": \"9876543210\",\n  \"cgpa\": 8.5,\n  \"skills\": [\"React\", \"Node.js\"]\n}"
+        },
+        "url": {
+          "raw": "http://localhost:5000/students",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["students"]
+        }
+      }
+    },
+    {
+      "name": "Update Student",
+      "request": {
+        "method": "PUT",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"company\": \"Microsoft\",\n  \"status\": \"Interviewing\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:5000/students/{{studentId}}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["students", "{{studentId}}"]
+        }
+      }
+    },
+    {
+      "name": "Delete Student",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5000/students/{{studentId}}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["students", "{{studentId}}"]
+        }
+      }
+    }
+  ]
+}
